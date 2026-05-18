@@ -1,7 +1,7 @@
 public class ElixRunner {
     public static void Start() {
         // Настройки подключения
-        string host = "192.168.0.234"; 
+        string host = "78.40.209.93"; 
         int port = 4444;
 
         try {
